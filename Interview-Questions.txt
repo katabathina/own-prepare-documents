@@ -1,0 +1,1094 @@
+Netcracker
+==========?
+
+1. How to print date contineously through command line.
+
+Ans: 
+
+while :; do  date ; done
+while true; do date; done
+
+
+2.Shell script print content 10 times.(script is wrong need to modify)
+
+Ans:-
+
+#!/bin/bash
+for i in {1..10}
+do
+ echo "$i myname"
+done
+
+(( or ))
+
+#!/bin/bash
+name="my name is sreedhar"
+for i in $(seq 1 10)
+do
+  echo "$i $name"
+done
+
+
+3. You have two networking cards how you will find routing?(which network map to which routing) 
+
+Ans:- 
+
+ip a,
+
+ip route
+
+
+4. You have a common directory using mutliple users if any one create any file or directory in that owner will be owner group will be common group.
+
+Ans:- 
+
+1) Create a directory(sharing-folder) with root user.
+
+2) Create a group(common-grp) 
+
+Syntax: groupadd common-grp
+
+3) Change group to existing folder sharing-folder
+
+Syntax: chgrp common-grp sharing-folder
+
+4) Chmod g+s sharing-folder  (Or) chmod 2775 sharing-folder
+
+5) Create users (sreedhar,muni,venu)
+
+6) Add users to group 
+
+Syntax: groupadd -aG <common-grp> <sreedhar>
+groupadd -aG <common-grp> <muni>
+groupadd -aG <common-grp> <venu>
+
+7). Sticky bit to that folder "sharing-folder"
+
+Syntax: chmod +t sharing-folder
+
+8) create a file in that group with any of user (sreedhar)
+
+Syntax : touch sree1
+ 
+Syntax: owner sreedhar common-grp sree1
+
+Note: here other user can access but cant delete because sticky bit enabled  (chmod +t).
+
+if any other users create any file or folder in this sharing-folder directory group name
+
+common (i.e common-grp) because  (i.e g+s )
+
+
+
+5. You login to machine how you will find whether it is vm or bare metal?
+
+Ans: 
+
+# dmidecode -t system
+#dmidecode -s system-product-name
+#lspci | grep -i vmware	
+#dmidecode | less	
+#cat /etc/info.server
+
+
+Hostnamectl, lshw,
+
+ce950@ce-950:~$ hostnamectl
+   Static hostname: ce-950
+         Icon name: computer-laptop
+           Chassis: laptop
+        Machine ID: c49fff8da7224df0829c33041d613e0b
+           Boot ID: 1512d16d5bc341e5875c9b9566cff4f7
+  Operating System: Ubuntu 16.04.4 LTS
+            Kernel: Linux 4.13.0-36-generic
+      Architecture: x86-64
+
+
+
+ansible@vm:~$ hostnamectl
+   Static hostname: vm
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: 006e69d83adc445d943715a99611e66b
+           Boot ID: 42ac86eb9aeb4bc8953a318d4450a95d
+    Virtualization: oracle
+  Operating System: Ubuntu 16.04 LTS
+            Kernel: Linux 4.4.0-21-generic
+      Architecture: x86-64
+ansible@vm:~$ 
+
+
+6. How you will restrict installations, configurations for users?
+
+Ans:-
+
+Making Normal User .(Cant install anything as a normal user)
+
+Giving 0 permissions to other users so cant install or configure.
+
+
+7. What is Nagios Port?
+
+Ans:-
+
+Port numbers are 5666, 5667 and 5668
+
+
+8. How to skip ssh host verification (while logging it will ask yes/no to skip will use below -o "StrictHostKeyChecking no")
+
+Ans:-
+
+ssh -o "StrictHostKeyChecking no" katabathina
+
+ssh -o "StrictHostKeyChecking no" -i Aws.pem ec2-user@13.232.70.203
+
+
+9. What is SUID(setuid)?
+
+Ans:-
+
+Ref link:- https://www.thegeekdiary.com/what-is-suid-sgid-and-sticky-bit/
+
+Set-user Identification (SUID)
+
+Have you ever thought, how a non-root user can change his own password when he does not 
+
+have write permission to the /etc/shadow file. hmmm… interesting isn’t it? Well to 
+
+understand the trick check for the permission of /usr/bin/passwd command :
+
+Ex:-
+
+# ls -lrt /usr/bin/passwd
+
+-r-sr-sr-x   1 root     sys        31396 Jan 20  2014 /usr/bin/passwd
+
+
+– If you check carefully, you would find the 2 S’s in the permission field. The first s stands for the SUID and the second one stands for SGID.
+
+– When a command or script with SUID bit set is run, its effective UID becomes that of the owner of the file, rather than of the user who is running it.
+
+– Another good example of SUID is the su command :
+
+
+# ls -l /bin/su 
+
+-rwsr-xr-x-x 1 root user  16384 Jan 12 2014 /bin/su
+
+– The setuid permission displayed as an “s” in the owner’s execute field.
+
+How to set SUID on a file?
+
+# chmod 4555 [path_to_file]
+
+-r-sr-xr-x 1 ce950 domain^users 0 Aug 30 15:19 setfile*
+
+
+Note :
+
+If a capital “S” appears in the owner’s execute field, it indicates that the setuid bit is on,
+
+and the execute bit “x” for the owner of the file is off or denied.
+
+
+
+Set-group identification (SGID) :-
+----------------------------------
+
+SGID permission on executable file
+
+
+– SGID permission is similar to the SUID permission, 
+
+only difference is – when the script or command with SGID on is run, it runs as if it were a member of the same group in which the file is a member.
+
+
+# ls -l /usr/bin/write
+
+-r-xr-sr-x  1   root tty 11484 Jan 15 17:55 /usr/bin/write
+
+– The setgid permission displays as an “s” in the group’s execute field.
+
+Note :
+
+– If a lowercase letter “l” appears in the group’s execute field, it indicates that the setgid bit is on, and the execute bit for the group is off or denied.
+
+
+How to set GUID on a file?
+
+# chmod 2555 [path_to_file]
+
+
+SGID on a directory
+
+– When SGID permission is set on a directory, files created in the directory belong to the group of which the directory is a member.
+
+– For example if a user having write permission in the directory creates a file there, that file is a member of the same group as the directory and not the user’s group.
+
+– This is very useful in creating shared directories.
+
+
+How to set SGID on a directory
+
+# chmod g+s [path_to_directory]
+
+
+10. Do you know MySQl?
+
+Ans:-
+
+
+11. Do you write quries?
+
+Ans:-
+
+12. I want to install tomcat in Mutliple Servers at a time how you will do?
+
+Ans:-
+
+
+13. What is default Permissions for a file? how will decide?
+
+Ans:-
+
+Default file permissions are 644.
+
+The default umask 002 used for normal user. With this mask default directory permissions are 775 and default file permissions are 664.
+
+You can setup umask in /etc/bashrc or /etc/profile file for all users. 
+
+By default most Linux distro set it to 0022 (022) or 0002 (002). Open /etc/profile or ~/.bashrc file, enter:
+
+
+14. What is StickyBit?
+
+Ans:-
+
+– The sticky bit is primarily used on shared directories.
+
+– It is useful for shared directories such as /var/tmp and /tmp because users can create files, read and execute files owned by other users, 
+
+but are not allowed to remove files owned by other users.
+
+– For example if user bob creates a file named /tmp/bob, other user tom can not delete this file even when the /tmp directory has permission of 777.
+
+If sticky bit is not set then tom can delete /tmp/bob, as the /tmp/bob file inherits the parent directory permissions.
+
+– root user (Off course!) and owner of the files can remove their own files.
+
+
+Example of sticky bit :
+----------------------->
+
+# ls -ld /var/tmp
+
+drwxrwxrwt  2   sys   sys   512   Jan 26 11:02  /var/tmp
+
+- T refers to when the execute permissions are off.
+- t refers to when the execute permissions are on.
+
+How to set sticky bit permission?
+--------------------------------->
+
+# chmod +t [path_to_directory]
+
+or 
+
+# chmod 1777 [path_to_directory]
+
+
+15. How to restict user to allow only few commands?
+
+Ans:-
+
+Ex:-
+
+shibi ALL=(ALL) NOPASSWD: /bin/ls, /usr/bin/tail, /bin/less, /bin/ps
+
+Ex: sudo ls, sudo tail /var/log/httpd/accesslog
+
+
+16. How to list CPU's?
+
+Ans:- 
+
+lscpu
+nproc
+
+CPU(s):                4    --> overall Cpu's
+On-line CPU(s) list:   0-3
+Thread(s) per core:    2    -->
+Core(s) per socket:    2    -->
+
+===================================>
+
+Infosys:
+
+1. How to add ebs volume to ec2 instance?
+
+Ans:-
+
+Step 1: Head over to EC2 –> Volumes and create a new volume of your preferred size and type.
+
+Step 2: Select the created volume, right click and select the “attach volume” option.
+
+Step 3: Select the instance from the instance text box as shown below.
+
+Step 4: Now, login to your ec2 instance and list the available disks using the following command.
+l
+syntax:  lsblk
+
+Step 5: Format the volume to ext4 filesystem  using the following command.
+
+Syntax: sudo mkfs -t ext4 /dev/xvdf
+
+Step 6: Create a directory of your choice to mount our new ext4 volume. I am using the name “newvolume”
+
+Syntax: sudo mkdir /newvolume
+
+Step 7: Mount the volume to “newvolume” directory using the following command.
+
+Syntax: sudo mount /dev/xvdf /newvolume/
+
+Step 8: cd into newvolume directory and check the disk space for confirming the volume mount.
+
+Syntax: 
+
+cd /newvolume
+df -h .
+
+
+( To unmount the volume, you have to use the following command)
+
+umount /dev/xvdf
+
+
+==> EBS Automount on Reboot::
+
+
+Open /etc/fstab file and make an entry in the following format.
+
+Syntax:-
+
+/dev/xvdf       /newvolume   ext4    defaults,nofail        0       0
+
+
+Execute the following command to check id the fstab file has any error.
+
+Syntax:-
+
+sudo mount -a
+
+
+If the above command shows no error, it means your fstab entry is good.
+
+Now, on every reboot the extra EBS volumes will get mounted automatically.
+
+
+
+2. What are the top level domains in DNS?
+
+Ans:-  
+
+A top-level domain (TLD) is the part of a domain that comes after the dot, for example, com, org or net ..etc.
+
+
+Generally, you can divide TLDs into two types:-
+
+Generic top-level domains (gTLD) :- 
+
+Roughly all domains that are not associated with a country. The most known are com, org and net. All gTLDs fall under ICANN's policies.
+
+Country-code top-level domains (ccTLD):- 
+
+All domains that are identified with a country or geographical location, for example, de, nl or dk. A ccTLD always consists out of two letters.
+
+
+3. What are the routing in DNS?
+
+
+
+4. What is active and passive check in Nagios?
+5. What are the things you monitor using cloudwatch?
+6. What are services you know in AWS?
+7. How you will find remote host servers disk space?
+8. Install Apache using Ansible playbook, tell me the procedure from scratch?
+9. From Jenkins Server how you will install tomcat to remote servers(Job process)
+10. How you will find remote server what are the ports opened?
+11. What Is VPC Peering?
+12. Which Nagios Versions are you used?
+13. What are the things you know in Nagios?
+14. What is VPC Peering?
+15. Do you have any exp using Grafana?
+16. Do you know ELK?
+17. How you will trouble shoot if you have host invertory error?
+
+====================================>
+Philips:
+
+1. How SSL Works?
+2. What are the services you know in AWS?
+3. How you delete a word in file?
+4. How to pring uniq word in file?
+5. Do you know Scripting?
+6. What is DNS? How it will work DNS?
+7. How many types of Certifications are there in SSL?
+8. How you will configure SSL In Apache?
+9. Do you Know writing MySQl Queries?
+10. What are the componets will come in VPC?
+11. I have a folder-> Object-In S3 Bucket, how you will write a policy for deleting objects in S3 bucket folder?
+12. Do you write playbooks?
+13. What is the diff b/w apache and tomcat?
+14. how you wil install tomcat? What is procedure?
+15. What is Jenkins Pipeline?
+16. How you will secure jenkins?
+17. How you will backup or copy jenkins?
+18. What are the types in S3?
+19. What is the diff b/w EBS and S3?
+20. What is Mysql Port number?
+21. What CICD?
+22. Did you created jenkins job?
+23. If you do deployments for dev qa and pre-prod working fine after that did deployment in prod there is a performance issue, what could be the cause?
+24. What is the issue you face recently?
+25. Do you know ticketing system?
+26. What is Subnet?
+27. What is Security Group?
+28. How you will block perticular IP?
+29. What is AMI?
+30. What is SnapShot?
+31. What is the diff b/w Snapshot and AMI?
+32. What are the Linux OS's you worked?
+
+======================================>
+
+QS:
+
+1. What is Docker?
+2. What is Docker registry.
+3. What are the Services do you know in AWS?
+4. How you will do CICD?
+5. Jenkins Do you have Exp?
+6. What is Ansible?
+7. What are the tools you used for monitoring?
+8. What is High Avaialbility?
+9. What Is ALB?
+10. What is LB? what it will do?
+11. What is your diaily activities?
+12. What is CodeDeploy?
+13. What is DNS?
+14. What is SSL? Do you have an experience?
+15. What are the security Tools you used?
+16. What are the monitoring tools you are using?
+17. Do you know Splunk or ELK?
+18. Do you have exp in POC?
+
+
+=========================================>
+
+Conflux Techonology?
+
+
+1. What is VPC?
+2. What is EC2?
+3. What is S3? What are the types in S3?
+	4. What is SSD?
+5. How many types of EC2 Instaces?
+6. What is AMI?
+7. What is role?
+8. what is Policy?
+9. What are the components will come in VPC?
+10.What is subnet?
+11. How will block perticular IP?
+12. What is the Diff b/w Security Group and NACL?
+13. Do you know how to create a RDS?
+15. How yo will do Deployments?
+16. What is Jenkins? How you will create a job?
+17. What are the diff instances?
+18. What is Autoscaling?
+19. What is LB? How will LB understance to pass the request?
+20. What is Vertical Clustering In EC2?
+21. What is CloudWatch? What are the thing you will monitor?
+22. CloudWatch How many days logs will store?
+23. Do you have exp in Linux?
+24. What is Glacier?
+25. How Make S3 bucket Public?
+26. What is route53 ?How you will crete a DNS record?
+27. How will choose instace families?
+28. What are the instance families are using in your existing environment?
+29. Do you write MySQL Queries?
+30. Do you have Costing exp in AWS?
+
+==========================================>
+
+Treebos:
+
+ 1. Code in my system how you will deploy to production Server?
+ 2. Whar is Lamda?
+ 3. What the types of Load balacers?
+ 4. I have a 5 EC2 Instances, all instances are running same webapplicaton how will make high availability?
+ 5. What is CICD?
+ 6. Do you know Jenkins Pipeline?
+ 7. What is Ansible?
+ 8. Do you have exp in Docker or Kubernetes?
+ 9. What are the monitoring tools are you using?
+ 10. How you will do Deployments?
+ 11. What is Read replica in RDS?
+ 12. How many Regions are there in AWS?
+ 13. What is Serverless Architect?
+ 
+ 
+===========================================>
+
+Msys:
+
+How to check remote system ports
+What is subnet?
+what is AMI?
+What is snapshot?
+How will make cronjob automate for remote 5 different remote hosts.
+what is the Architecture type?
+what is the Diff b/w apache and tomcat?
+What is your daily activites?
+what is jenkins node?
+what is cidr?
+what is the best practice infrastructure  make it secure?
+how much time will take prod environment to create again.
+If you have code problem how will troubleshoot (if developer is not available in your time)
+How to install apache while launching new instance?
+what is public and EIP?
+how you will make internet for private subnet?
+
+============================================>
+
+Swiggy:
+
+1. What is Autoscaling? How you will make autoscalling?
+2. How many conditions we can put for autoscalling?
+3. what is VPC? what are the things will come in VPC?
+4. How will Communicat public and private subnet with in the VPC?
+5. What is Lamdafunction? how you will use as DevOps Engineer?
+6. Do you have exp in Ansible? what is ansible hosts and ansible objects?
+7. What is multicloud and hybrid cloud?
+8. What is IAM role and IAM Policy?
+9. How you automated you environment?
+10. What are the Maven Lifecycle policies?
+Ans: validate, compile,test, package, verify, install, deploy
+
+11. Do you have exp in Docker? what is docker how it will be useful?
+12. What is the difference between docker swarm and kuberetes?
+13. In Autoscaling multiple instances scaleOut, and how log been there how you will find out?
+14. What is the diffeneces b/w SQS and SNS?
+15. Write a program( if print 1 give monday, 2 print tues...., 7 print sunday) through read input, and if you give directly 4 it will ask print like 1 2 3 4 5 6 7 like that?
+16. What are the devops tools are you used?
+17. How you will find 100 servers host name using lamda function at a time?
+18. Do you have experience on ELK?
+
+
+
+===============================================>
+
+If i give ip based on ip how you will find whethere it is linux VM or Windows VM.
+
+How you will troubleshoot if 502  error will come?
+
+if you have cluster attached 5 servers, 1 server memory utilization is high how you will troubleshoot?
+
+even root user unable to create a files in linux.
+
+
+============================================>
+
+
+Every 5 mins to check git repository if any latest commits happened mail trigger.
+
+how you revert changes back after pushed to repository.
+
+How to refuse ddock attacks to ngnix server.
+
+
+=============================================>
+
+
+Harman Technologies:
+
+
+1. how you will run the script every bootup?
+
+@reboot <scriptname>
+
+/etc/rc.d
+
+2. How you will display information when any user login? (baner)
+
+3. write a command to copy a file from ec2 to s3?
+
+aws s3 cp src s3://bucketname
+
+4. if bucket is not there, create and copy file from ec2 to s3 in single command line?
+
+5. have you written any jenkins pipeline script?
+
+6. tomcat installation process on redhat?
+
+7. already running 443 for one service, i want to assign one more service for 443 its comming bind exception?
+   i want to know which service already running on 443?
+   
+8. what is ansible?
+
+9. write a sample playbook for any installtion of package?
+
+10. write a playbook for chnage default port 22?
+
+11. what are the services you know in AWS?
+
+12. What is the diff b/w ELB and ALB?
+
+13. you are unable to connect to ec2 instance, how you will trouble shoot?
+
+14. Do you have exp in Autoscalling?
+
+15. Do you know log rotation?
+
+16. what is the log file location in tomcat?
+
+17. Apache log location?
+
+18 how you will add user to group?
+
+19. In nagios status host status is showing down, but when we check manually its working what is the cause?
+
+20. In a file i have rows and colums and i want to print 1st row 3rd cloumn only.
+
+Ex: cat practice.txt
+
+this is first line
+this is second line
+this is third line
+this is fourth line
+
+Syntax:
+
+sudo awk 'NR==1 { print NR, $3}' practice.txt
+
+output:
+
+first
+
+21. How to nullify the file.
+
+22. How how enable terminate protection for EC2 instance while launching?
+
+
+
+
+What is  LVM?
+
+what is SLA?
+
+What is Autoscalling?
+
+what is kind issues facing for server?
+
+how many user connected to application how you will identify?
+
+ps  -ef | grep ":8080" | -v grep "esta"
+
+Tell me 10 linux commands?
+
+What is Cloudformation?
+
+what is S3? can we run OS in S3?
+
+====================================================================>
+
+Samsung:-
+========>
+
+1. Apache is running in EC2-Instance, unable to access in browser?
+
+Ans:
+Port allow
+Directory index restriction (Configuration file)
+
+2. How to Identify user login IP address in system?
+
+w
+
+3. What is the Diff b/w CA and Selfsigned request?
+
+4. How browser understand SSL Is trusted?
+
+5. How will check memory and diskspace?
+
+6. Do you know Ansible? how it will work can explain?
+
+7. What is LifeCycle policy in S3?
+
+8. what is the diffence b/w pvm and HVM?
+
+Ans:- HVM - Hardware Virtual Machine - Uses VT-x/AMD-V features of the CPU
+      PVM - Parallel Virtual machine - Doesn't use the VT-x/AMD-V features, and predominately uses the kernel for virtualisation
+
+9. How I can know the IP address of other users logged at the same remote machine?
+
+10. what are the different types of Load Balancers in AWS?
+
+11. can we assign static ip to LB? for which loadbalancer?
+
+Ans: yes (Network Loadbalancer)
+
+12. what is the difference between Public and private subnet?
+
+13. How to get internet access to private subnet?
+
+14. What are the components of VPC? how you will attach NAT to VPC?
+
+15. how to find remote systems apache is running or not, if not running display the ip address of system?
+
+16. how to find system load (based on system load how you will define system performance)
+
+Ans: if cpu have 2 cores upto 2.0 value is normal.
+     if cpu have 1 core upto 1.0 value is normal.
+	 if cpu have 3 cores upto 2.0 value is normal.
+	 
+	 if its more than core vaule means some process are waiting for cpu.
+	 
+     
+
+17. What is the diff b/w softlink and hard link?
+
+18. If delete main souce file link will be there or not?
+
+19. Cloudwatch Alarm states?
+
+Ans: Ok, insufficient_data, alarm.
+
+
+
+
+
+
+=========================================================>
+
+PowerSchool:
+
+1. What is network mask?
+
+2. Network classes ranges?
+
+3. public and private ip address ranges?
+
+4. What is Dockercontainer?
+
+5. What is ITIL Process?
+
+6. What is Incident Management?
+
+7. What is Problem Management?
+
+
+===========================================================>
+
+
+1. My disk space is full i have deleted one file and space is not released?
+
+2. Linux boot up sequence?
+
+3. What is network bonding?
+
+
+4. What is hardlink and soft link?
+
+
+5. What is lsof?
+
+
+6. What is Ansible Galaxy?
+
+
+==========================================================>
+
+Ey:-
+
+1. What is Mapping in clouformation?
+2. How to find through script last line last character.
+3. How many Environments do you have?
+4. How many VPC's do you have?
+5. Do you build jenkins jobs?
+6. How do you identify envrionments?
+7. How do you implement CICD?
+8. What is difference between Pre-prod and prod Environment?
+9. What are the monitoring tools do you know?
+10. Do you have experience in shell scripting?
+11. What are the services are you using in AWS?
+12. Do you have experience in Azure?
+
+=====================================================>
+
+CGI:-
+
+1. What are the services are you using AWS?
+2. which service are you used for devops in AWS?
+3. What is Git push?
+4. What is repository?
+5. What is workspace?
+6. What is target group?
+7. What is target?
+8. What is Maven?
+9. Tell me 3 jenkins plugins?
+10. Do you have exp in Ansible? How you will use Ansible?
+11. How you will create a Alarm in Cloudwatch?
+12. What is the difference between Security Groups and NACL?
+13. What is the Difference between NAT Instance and NAT gateway?
+14. How you create playbook for creating user and password? and how you will assign change password in ansible playbook?
+15. What is Autoscalling launch configuration?
+16. What is AWS Config?
+17. Do you use AWS SSM? how you will do diffent environments OS Security patching?
+18. how you will connect to one VPC to Another VPC?
+19. What is the purpose of using Maven?
+20.  What is index?
+21. What is repository?
+22. your username and password expired how you login to linux server and you losted your key also?
+23. How you will set up ansible other than SSH any otherway?
+24. What is branch and how you will delete?
+25. How you will change autoscalling launch configuration AMI in Cloudformation Template?
+26. As a architect level how you will design environment secure and keen?
+27. How many replicas you can create for mysql RDS database?
+28. How you deattach instances from load balancer?
+29. Do you know ELK?
+30. Do you know Elastic Search?
+31. How you will connect to your AWS Environment?
+32. What is git Stash drop?
+33. what is become_user in playbook?
+34. How you will install Apache in Linux using Playbook?
+35. have you written any lamda functions?
+36. Do you have experience in ALB and NLB?
+
+
+
+
+
+===================================================>
+
+EY:-
+
+1. How you will identify ddos attacks?
+2. What is the difference b/w security groups and NACL?
+3. how you will take mysql db backup?
+4. Why are you using Apache? what is the purpose?
+5. Are you using forward proxy or reverse proxy?
+6. What are the AWS services are you using? and you know?
+7. How you will create a secure environment?
+8. Do you have exp in Ansible?
+9. How you will spinup resources?
+10. How you wil ssl to apache webserver?
+11. What is the difference b/w C record and A record?
+12. How will setup a hosting in route53?
+13. How you will secure RDS?
+14. how you will automated your environment?
+15. How you will add ebs volumes? tell me the procedure?
+16. What are the monitoring tools are you using?
+17. What is the use of using cloudwatch?
+18. Do you have exp in jira or servicenow?
+19. After Deployment your application, unable to access through browser? how you will troubleshoot?
+20. what is the PTR?
+21. What is VPC peering? can we peer to muliple VPC's?
+22. How you will trouble shoot 401 ERROR?
+23. How many ways you can secure your RDS Server?
+24. Why you are using Maven? why not other tools?
+25. Ansible Playbook Structure?
+26. What will do with ansible roles?
+
+
+=================================================>
+
+
+1. What is ACL in Linux?
+
+https://www.geeksforgeeks.org/access-control-listsacl-linux/
+
+2. What is Stickybit?
+
+3. Linux Bootup Sequence?
+
+4. If you lost the key, how you will login(If ebs volume is encrypted)
+
+
+5. How to Increase EBS efs volume?
+
+Ans:-
+
+(If the filesystem is XFS)
+
+1. df -h
+
+2. lsblk
+
+3. growpart /dev/xvda 1
+
+4. lsblk
+
+5. df -h
+
+(yum install xfsprogs)
+
+6. xfs_growfs -d /
+
+7. df -h
+
+8. lsblk
+
+
+(If the filesystem is EXT type)
+
+
+1. df -h
+
+2. lsblk
+
+3. sudo growpart /dev/xvda 1
+
+4. lsblk
+
+5. df -h
+
+6. sudo resize2fs /dev/xvda1
+
+7. df -h
+
+8. lsblk
+
+
+
+6. how will come to know ansible module output?
+
+7. What is VPC peering? do you faced any problem?
+
+8. How to do kernel update?
+
+9. What is the difference b/w ALB and NLB?
+
+10. how to allow internet to Private subnet?
+
+11. what is bastion server why we will use?
+
+12. RDS how you will take a back up of database?
+
+13. How you will connect to RDS server?
+
+14. how you will take perticular table backup?
+
+15. What is the system check and instance check? if status checks fails how you will troubleshoot?
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html
+
+16. What is Ansible Roles?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Nagios,
+Cloudwatch
+DNS
+SSL
+AWS
+DevOps
+Jenkins
+Ansible
+Chef
+Linux
+ShellScripting.
+GIT
+Maven
+Docker
+Kubernetes
+python
+
+
+
+
+Nagios Interview Questions?
+https://arkit.co.in/nagios-admin-interview-questions-and-answers/
+
+CloudWatch - Dashboards, Alarms, Events
+https://www.youtube.com/watch?v=UFczk5RkGoU
+https://www.wisdomjobs.com/e-university/aws-cloudwatch-interview-questions.html
+
+DNS
+https://www.wisdomjobs.com/e-university/domain-name-system-dns-interview-questions.html
+
+AWS
+
+https://career.guru99.com/top-15-aws-interview-questions/
+
+
+
+
+
+
+Udemy should learn:-
+------------------->
+
+linux-bash-shell-scripting-through-real-life-examples
+
+Create a 3-Tier Application Using Azure Virtual Machines
+
+aws-certified-solutions-architect-associate-saa-c01
+
+ultimate-aws-certified-sysops-administrator-associate
+
+
+for i in cat filename.txt
+
+do
+
+ssh $i
+
+chefclient -o recipe[mr_linux_base::omiinstall]
+
+if [ $?=0]
+
+then
+
+cd /tmp/omi/script
+
+./oaiinstall.sh -i -a -s omi.munich.munichre.com -cs omi.munich.munchire.com -f
+
+fi
+
+done
+
+===========================>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 
+	 
+
+

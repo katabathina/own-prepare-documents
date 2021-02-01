@@ -1,0 +1,120 @@
+
+---> Lamp Created renetly--> on redhat 7 linux.
+
+https://tecadmin.net/install-lamp-apache-mysql-and-php-on-centos-rhel-7/
+
+
+
+=====================
+
+
+--> RDS Server created-->db instance, db name, db user,db passwd
+
+Port-->mysql/aurora -->3306 allow-anywhere.
+
+---> Created ec2 instance(redhat7)-->
+
+ssh -22-anywhere-->allow
+http-80-anywhere-->allow
+
+--> yum update
+--> yum install httpd
+--> systemctl enable httpd
+--->systemctl start httpd
+
+
+--->yum install php*
+
+-->for connect rds mysql(mysql-server required)
+
+--> yum install mysql-server(will not work first)
+
+---> rpm -Uvh http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm (run this command)
+
+---->yum install mysql-server
+
+---> connect to mysql with db user and db passwd
+
+    mysql -h <endpoint> -u db user -p 
+
+---> CREATE DATABASE dbname;
+
+​GRANT ALL PRIVILEGES ON dbname.* TO 'db user'@'localhost' IDENTIFIED BY 'db user passwd';
+​FLUSH PRIVILEGES;
+
+Ex:-
+
+GRANT ALL PRIVILEGES ON sample.* TO 'testuser'@'34.244.127.214' IDENTIFIED BY 'testuser123';
+FLUSH PRIVILEGES;
+
+​GRANT ALL PRIVILEGES ON sample.* TO 'testuser'@'172.31.30.234' IDENTIFIED BY 'testuser123';
+
+FLUSH PRIVILEGES;
+
+---> download wordpress from wordpress site-->
+
+https://wordpress.org/download/
+
+download the wordpress zip file to local linux machine.
+
+exrtract unzip wordpress file 
+
+now it will give "wordpress" directory.
+
+copy to /var/www/html/wordpress
+
+mv * ../
+
+/var/www/html/all files of wordpress
+
+---> chanege wp-config-sample.php to wp-config.php
+
+-->vi wp-config.php
+
+configure db,dbname,passwd ,rds endpoint details in wp-config.php
+
+---> goto Vi /etc/httpd/conf/httpd.conf
+
+Change DirectoryIndex Index.html to Index.php
+
+---> Systemctl stop httpd
+--> Systemctl start httpd
+
+
+--> goto browser search with public ip:
+
+Error establishing a database connection(if get this error disable selinux)
+
+-->getenforce
+-->setenforce 0
+
+--> goto browser search with public ip: 
+
+wordpress related configuration will ask
+
+
+site name: welcome to mysite
+
+username:sreedhar
+
+passwd:XXXXX      &tZ&ATLIE7lsnN(pd0
+
+email:XXXXXXXXX    sreedhar.katabathin@gmail.com
+
+http://34.244.127.214/wp-admin/install.php?step=2
+
+==>logout
+
+next time youwant to login--> IP/wp-admin
+
+it will ask username and password.
+
+=================
+
+
+
+
+
+
+
+

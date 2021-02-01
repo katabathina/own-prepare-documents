@@ -1,0 +1,151 @@
+
+#DockerInterviewquestions #realtime #answers
+===========================================>
+
+1. what is docker?
+2. what is difference between vm's and docker ?
+3. what is dockerfile?
+4. what is difference between the kill and stop?
+5. what is difference between and Add and copy commands in a docokerfile?
+6. what is difference between cmd and entrypoint ?
+7. which is the base image you will prefer your docker file ? alpine
+8. how login a running container ? docker exec -it contianerid
+9. how to check live logs in docker containers? docker logs --follow
+10. how to check no.of containers running your machine ? docker ps
+11. how to check stop and running containers ? docker ps -a
+12. what is port forwarding? -p 8181:9090
+13. How to run a container in background? -d
+14. what is first line in a dockerfile? FROM 
+14. what are the commands have you used in your docker file ? FROM RUN CMD ENTRYPOINT label workdir COPY ADD EXPOSE VOLUME 
+15. what is label in docker?
+16. what is docker tag?
+17. How you store data persistently? volumes
+18. have you worked on docker volumes? -v hostmachie/path:container/data/path
+19. what is docker network ?
+20. I have a one web application is running on one container and database is running in one container how you communicate these two containers?
+21. where you are store docker images?  registry2 |jforg |dockerhub
+22. how to run multiple containers at a time?  docker-compose 
+23. how to share data between two containers?
+container 1 
+  docker run --volumes-from container1 --name container2
+  
+
+
+#Git #GitInterviewQuestions #Realtime
+===================================>
+
+
+1. What is git? 
+2. What is difference between git and GitHub and GitLab (for CI tool also we can use)?
+3. Any other version control tools other than git? 
+4. What is difference between svn and git?
+5. What is merge conflicts have you faced ever in you experience? if you face how you resolve?
+6. What is git stash?
+7. What is git HEAD?
+8. What is staging area in git?
+9. What is difference between git fetch and pull and clone?
+10. What is difference between git merge and rebase?
+11. What is .gitignore file? What is the purpose of the file?
+12. What is git branch? Have you worked on branches?
+13. How to merge branches?
+14. What is cherry-pick in git?
+15. How to create a git project?
+16. How to check difference in between two files?
+17. How edit the committed message?
+18. How to check the last few commits?
+19. How to delete remote branch and local branch?
+20. How to create local branch?
+21. What is tag? How many types in tag? How we will create tags?
+22. How to roll back committed code.
+
+
+
+Ansible
+-------
+1.what are all configuration management tools are available ?
+2.what is ansible? why we choose ansible?
+3.what is the purpose of ansible?
+4.ansible vs chef ?
+5.ansible architecture ?
+6.ansible terminology ?
+7.ansible installation  on aws ec2 
+8.what is inventery file ?
+9.what is ansible.conf file ?
+10.what to divide the groups in inventory ?
+11.Add the nodes into ansible server?
+12.Run ping module to check whether nodes are connected or not 
+
+
+Static and dynamic Inventory?
+
+Static Inventory: we will specify ip addresses in /etc/ansible/hosts
+
+Dynamic Inventory: while on the fly we will get the ip addresses(exp: if we dont have any existing instances
+
+we will lanch a new instance using playbook and get the ip and add into inventory file)
+
+
+Ansible vault
+===============>
+1. creating vault file
+2. convert existing files to vault
+3. view the vault file.
+4. edit the encrypt file.
+5. change vault password
+6. decrypt the vault file
+7. how to use vault for sensitive data.
+8. advantages/disadvantages of vault
+9. how to read vault information trough playbooks
+10. real-world example of ansible vault
+
+ansible
+----------
+
+ansible modules
+--------------
+create a file
+writing content in file
+change permission to file
+create a directory
+create a multiple files at a time using ansible loops
+create a multiple files with different permissions using ansible loops
+delete a file
+real-time use-case example
+
+yum
+service
+LineINfile
+
+
+
+Ansible real time playbooks end to end deployments
+-------------------------------------------------->
+write a playbook to install git ?
+write a playbook to install maven ?
+what is ansible roles ?
+what is ansible-galaxy ?
+what is ansible tags ? advantages ? how to use?
+How to create a role using anisble galaxy ?
+write a playbook to install apache tomcat ?
+deploy sample war file trough apache tomcat
+deploy end to end deployment trough ansible.
+
+
+Ansible vault
+-------------
+1. creating vault file
+2. convert existing files to vault
+3. view the vault file.
+4. edit the encrypt file.
+5. change vault password
+6. decrypt the vault file
+7. how to use vault for sensitive data.
+8. advantages/disadvantages of vault
+9. how to read vault information trough playbooks
+10. real-world example of ansible vault
+
+
+
+
+
+
